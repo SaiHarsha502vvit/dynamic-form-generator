@@ -5,6 +5,12 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
-
-
-global.alert = jest.fn();
+// Mock the clipboard API
+Object.assign(navigator, {
+    clipboard: {
+      writeText: jest.fn(),
+    },
+  });
+  
+  // Optionally, mock window.alert if your tests use it
+  global.alert = jest.fn();

@@ -1,66 +1,48 @@
 // src/__tests__/App.test.tsx
+
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import App from '../App';
 
 beforeEach(() => {
-  // Clear all instances and calls to constructor and all methods:
-  (global.alert as jest.Mock).mockClear();
-  (navigator.clipboard.writeText as jest.Mock).mockClear();
+  // Clear all mock function calls and instances
+  jest.clearAllMocks();
 });
 
 test('renders JSON Editor and Form Preview', async () => {
   render(<App />);
   
-  // Use findByText which returns a promise and waits for the element to appear
-  const editorElement = await screen.findByText(/JSON Editor/i);
-  const previewElement = await screen.findByText(/Form Preview/i);
+  const jsonEditor = await screen.findByText(/JSON Editor/i);
+  const formPreview = await screen.findByText(/Form Preview/i);
   
-  expect(editorElement).toBeInTheDocument();
-  expect(previewElement).toBeInTheDocument();
+  expect(jsonEditor).toBeInTheDocument();
+  expect(formPreview).toBeInTheDocument();
 });
 
 test('toggles dark mode', async () => {
   render(<App />);
-  const toggleButton = await screen.findByRole('button', { name: /toggle dark mode/i });
   
-  // Initially, dark mode should be off
-  expect(document.documentElement).not.toHaveClass('dark');
+  const toggleButton = screen.getByRole('button', { name: /dark mode/i });
   
-  // Click the toggle button
+  // Initially in light mode
+  expect(document.documentElement.classList.contains('dark')).toBe(false);
+  
+  // Toggle to dark mode
   fireEvent.click(toggleButton);
+  expect(document.documentElement.classList.contains('dark')).toBe(true);
   
-  // Wait for the dark mode class to be added
-  await waitFor(() => {
-    expect(document.documentElement).toHaveClass('dark');
-  });
-  
-  // Click again to toggle back
+  // Toggle back to light mode
   fireEvent.click(toggleButton);
-  
-  // Wait for the dark mode class to be removed
-  await waitFor(() => {
-    expect(document.documentElement).not.toHaveClass('dark');
-  });
+  expect(document.documentElement.classList.contains('dark')).toBe(false);
 });
 
 test('copies JSON to clipboard and shows alert', async () => {
   render(<App />);
   
-  const copyButton = await screen.findByRole('button', { name: /copy form json/i });
-  
-  // Mock the clipboard
-  Object.assign(navigator, {
-    clipboard: {
-      writeText: jest.fn().mockResolvedValue(undefined),
-    },
-  });
+  const copyButton = screen.getByRole('button', { name: /copy/i }); // Adjust the role/name as per your button
   
   fireEvent.click(copyButton);
   
   expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.any(String));
-  
-  await waitFor(() => {
-    expect(global.alert).toHaveBeenCalledWith('JSON copied to clipboard!');
-  });
+  expect(global.alert).toHaveBeenCalledWith('JSON copied to clipboard!');
 });
