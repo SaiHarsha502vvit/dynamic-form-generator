@@ -105,3 +105,6 @@
     npm run format
     ```
 
+## Deployment
+
+The application is deployed on Vercel and can be accessed [here](https://dynamic-form-generator-roan.vercel.app/).
