@@ -108,3 +108,10 @@
 ## Deployment
 
 The application is deployed on Vercel and can be accessed [here](https://dynamic-form-generator-roan.vercel.app/).
+
+## Bonus Points
+
+- **Add a "Copy Form JSON" button:** Implement a button that allows users to copy the JSON schema of the form to their clipboard.
+- **Implement form field validation preview:** Provide a preview of form field validations to ensure users can see the validation rules in action.
+- **Add dark mode support:** Introduce a dark mode option for the application to enhance user experience in low-light environments.
+- **Add ability to download form submissions as JSON:** Enable users to download their form submissions as a JSON file for easy data handling and storage.
